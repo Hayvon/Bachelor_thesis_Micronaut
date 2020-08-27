@@ -1,7 +1,6 @@
-package com.example;
+package com.example.Entity;
 
 
-import io.micronaut.data.annotation.MappedEntity;
 
 import javax.persistence.*;
 
@@ -26,6 +25,7 @@ public class User {
         this.name = name;
     }
 
+    //Setter and Getter
     public long getUserId() {
         return userId;
     }

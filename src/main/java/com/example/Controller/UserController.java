@@ -1,22 +1,25 @@
-package com.example;
+package com.example.Controller;
 
+import com.example.Entity.User;
+import com.example.Repo.UserRepo;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.annotation.Error;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import java.util.List;
 
 @Controller("/api/Users")
 public class UserController {
 
-   public static class NotFoundException extends Exception{}
+    public static class NotFoundException extends Exception{}
     public static class PayloadException extends Exception{}
     public static class NoSearchResultException extends Exception{}
 
-    @Inject
     private UserRepo userRepo;
+
+    public UserController(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
     //Shows all Users
     @Get(uri = "/", produces = {"application/json"})
@@ -30,7 +33,7 @@ public class UserController {
         return userList;
     }
 
-    //Returns specific User
+    //Shows specific User
     @Get(uri = "/{id}", produces = {"application/json"})
     User findUser(@PathVariable("id") Long id) throws NotFoundException{
         return userRepo.findById(id).orElseThrow(() -> new NotFoundException());
@@ -49,6 +52,7 @@ public class UserController {
         return "User created";
     }
 
+    //Exceptionhandling
     @Status(HttpStatus.NOT_FOUND)
     @Error(NotFoundException.class)
     public void handleNotFound(){}
@@ -60,4 +64,5 @@ public class UserController {
     @Status(HttpStatus.NO_CONTENT)
     @Error(NoSearchResultException.class)
     public void handleNoSearchResult(){}
+
 }

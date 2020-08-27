@@ -74,6 +74,29 @@
     {"pattern":"BPMNDI.xsd"},
     {"pattern":"DC.xsd"},
     {"pattern":"DI.xsd"},
-    {"pattern":"Semantic.xsd"}
-    ]
+    {"pattern":"Semantic.xsd"},
+
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/activiti-bpmn-externsions-5.0.xsd"},
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/activiti-bpmn-externsions-5.2.xsd"},
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/activiti-bpmn-externsions-5.3.xsd"},
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/activiti-bpmn-externsions-5.4.xsd"},
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/activiti-bpmn-externsions-5.10.xsd"},
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/BPMNDI.xsd"},
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/DC.xsd"},
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/DI.xsd"},
+    {"pattern":"org/camunda/bpm/engine/impl/bpmn/parser/Semantic.xsd"},
+
+    {"pattern":"bpm/Urlaubsantrag2.bpmn"},
+    {"pattern":"bpm/diagrams.txt"},
+    {"pattern":"static/index.html"},
+    {"pattern":"application.yml"},
+
+    {"pattern":"\\Qorg/hibernate/hibernate-configuration-3.0.dtd\\E"},
+    {"pattern":"\\Qorg/hibernate/hibernate-mapping-3.0.dtd\\E"},
+    {"pattern":"\\Qorg/hibernate/hibernate-mapping-4.0.xsd\\E"},
+    {"pattern":"\\Qorg/hibernate/jpa/orm_2_0.xsd\\E"},
+    {"pattern":"\\Qorg/hibernate/jpa/orm_2_1.xsd\\E"},
+    {"pattern":"\\Qorg/hibernate/xsd/cfg/legacy-configuration-4.0.xsd\\E"},
+    {"pattern":"\\Qorg/hibernate/xsd/mapping/legacy-mapping-4.0.xsd\\E"}
+  ]
     }

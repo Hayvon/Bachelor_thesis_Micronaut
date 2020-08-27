@@ -1,5 +1,9 @@
-package com.example;
+package com.example.Controller;
 
+import com.example.Entity.HolidayRequest;
+import com.example.Entity.User;
+import com.example.Repo.HolidayRequestRepo;
+import com.example.Repo.UserRepo;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.annotation.Error;
@@ -9,30 +13,32 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 
 @Controller("api/HolidayRequests")
 public class HolidayRequestController {
 
-    public static class NotFoundException extends Exception{}
+    public static class NotFoundHolidayRequestException extends Exception{}
     public static class PayloadException extends Exception{}
     public static class NoSearchResultException extends Exception{}
 
 
-    @Inject
     private HolidayRequestRepo holidayRequestRepo;
-    @Inject
     private RuntimeService runtimeService;
-    @Inject
     private RepositoryService repositoryService;
-    @Inject
     private UserRepo userRepo;
-    @Inject
     private ProcessEngine processEngine;
-    @Inject
     private TaskService taskService;
+
+    public HolidayRequestController(HolidayRequestRepo holidayRequestRepo, RuntimeService runtimeService, RepositoryService repositoryService, UserRepo userRepo, ProcessEngine processEngine, TaskService taskService) {
+        this.holidayRequestRepo = holidayRequestRepo;
+        this.runtimeService = runtimeService;
+        this.repositoryService = repositoryService;
+        this.userRepo = userRepo;
+        this.processEngine = processEngine;
+        this.taskService = taskService;
+    }
 
     String taskid = null;
     String taskAssigne = null;
@@ -77,18 +83,18 @@ public class HolidayRequestController {
         return  allHolidayRequests;
     }
 
-    //Show specific Holidayrequest
+    //Shows specific Holidayrequest
     @Get(uri = "/{id}", produces = {"application/json"})
-    HolidayRequest showSpecificHolidayRequest(@PathVariable("id") long id) throws NotFoundException {
+    HolidayRequest showSpecificHolidayRequest(@PathVariable("id") long id) throws NotFoundHolidayRequestException {
         checkExistingHolidayRequest(id);
         holidayRequest =  holidayRequestRepo.findById(id).get();
 
         return holidayRequest;
     }
 
-    //Assigning holidayrequests
+    //Assigning specific Holidayrequest
     @Post(value = "/{id}/assign", consumes ={"application/json"},produces = {"application/json"})
-    String assignTask(@Body() User newUser , @PathVariable("id") long id) throws PayloadException, NotFoundException {
+    String assignTask(@Body() User newUser , @PathVariable("id") long id) throws PayloadException, NotFoundHolidayRequestException {
 
         checkExistingHolidayRequest(id);
 
@@ -113,9 +119,9 @@ public class HolidayRequestController {
         }
     }
 
-    //Approving holidayrequests
+    //Approving specific Holidayrequest
     @Post(uri = "/{id}/approve", consumes ={"application/json"},produces = {"application/json"})
-    String approveRequest(@Body() User newUser , @PathVariable("id") long id) throws PayloadException, NotFoundException {
+    String approveRequest(@Body() User newUser , @PathVariable("id") long id) throws PayloadException, NotFoundHolidayRequestException {
 
         checkExistingHolidayRequest(id);
 
@@ -151,9 +157,9 @@ public class HolidayRequestController {
         }
     }
 
-    //Rejecting holidayrequest
+    //Rejecting specific Holidayrequest
     @Post(uri = "/{id}/reject", consumes ={"application/json"},produces = {"application/json"})
-    String rejectRequest(@Body() User newUser , @PathVariable("id") long id) throws NotFoundException, PayloadException {
+    String rejectRequest(@Body() User newUser , @PathVariable("id") long id) throws NotFoundHolidayRequestException, PayloadException {
 
         checkExistingHolidayRequest(id);
 
@@ -187,8 +193,8 @@ public class HolidayRequestController {
     }
 
     //Check if Holidayrequest with ID exists
-    void checkExistingHolidayRequest(long id) throws NotFoundException {
-        holidayRequestRepo.findById(id).orElseThrow(() -> new NotFoundException());
+    void checkExistingHolidayRequest(long id) throws NotFoundHolidayRequestException {
+        holidayRequestRepo.findById(id).orElseThrow(() -> new NotFoundHolidayRequestException());
     }
 
 
@@ -210,19 +216,9 @@ public class HolidayRequestController {
         holidayRequestRepo.update(holidayRequest);
     }
 
-      /* //Shows all active Tasks
-    @GetMapping(path = "/tasks", produces = {"application/json"})
-    String findAllTasks(){
-        String taskString = null;
-        List<Task> taskList = processEngine.getTaskService().createTaskQuery().active().list();
-        for (Task task: taskList) {
-          taskString = "Name: " + task.getName() + " ID: " + task.getId() + " Assignee: " + task.getAssignee();
-        }
-        return taskString;
-    }*/
-
+    //Exceptionhandling
     @Status(HttpStatus.NOT_FOUND)
-    @Error(NotFoundException.class)
+    @Error(NotFoundHolidayRequestException.class)
     public void handleNotFound(){}
 
     @Status(HttpStatus.BAD_REQUEST)
@@ -232,6 +228,7 @@ public class HolidayRequestController {
     @Status(HttpStatus.NO_CONTENT)
     @Error(NoSearchResultException.class)
     public void handleNoSearchResult(){}
+
 
 }
 
